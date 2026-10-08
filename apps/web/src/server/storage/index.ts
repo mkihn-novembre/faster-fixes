@@ -1,11 +1,18 @@
 import "server-only";
 
-import { cloudflare } from "@better-upload/server/clients";
+import { tigris } from "@better-upload/server/clients";
 
-// `?? ""` rather than `requireEnv`: this client is built at import, and throwing
-// there would break `next build` and test imports that run without R2 env.
-export const s3Client = cloudflare({
-  accountId: process.env.R2_ACCOUNT_ID ?? "",
-  accessKeyId: process.env.R2_ACCESS_KEY_ID ?? "",
-  secretAccessKey: process.env.R2_SECRET_ACCESS_KEY ?? "",
+// Placeholders rather than throwing: this client is built at import, and a
+// missing key would break `next build` and test imports that run without
+// storage env. Credentials come from the Tigris Vercel Marketplace integration.
+export const s3Client = tigris({
+  accessKeyId:
+    process.env.AWS_ACCESS_KEY_ID ||
+    process.env.TIGRIS_ACCESS_KEY_ID ||
+    "missing",
+  secretAccessKey:
+    process.env.AWS_SECRET_ACCESS_KEY ||
+    process.env.TIGRIS_SECRET_ACCESS_KEY ||
+    "missing",
+  endpoint: process.env.AWS_ENDPOINT_URL_S3 || "https://t3.storage.dev",
 });
