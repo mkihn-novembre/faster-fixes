@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "portless": "portless ff next dev --turbopack",
-    "build": "next build",
+    "build": "node scripts/copy-widget.mjs && next build",
     "start": "next start",
     "lint": "eslint --max-warnings 0 .",
     "lint:fix": "eslint --fix .",

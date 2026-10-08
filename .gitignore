@@ -57,3 +57,6 @@ _internal/
 # Skill eval workspaces
 packages/skills/*-workspace/
 
+
+# Widget script embed, copied from packages/widget at build time
+apps/web/public/widget.js

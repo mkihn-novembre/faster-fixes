@@ -1,6 +1,9 @@
 import type { CaptureViewportScreenshotOptions } from "./screenshot.js";
 
-export const FULL_CAPTURE_TIMEOUT = 3000;
+// Image-heavy pages (galleries, full-size photos) routinely need more than a few
+// seconds to inline every image. The submit never awaits the capture, so a
+// longer wait only delays the screenshot, not the Reviewer.
+export const FULL_CAPTURE_TIMEOUT = 15000;
 
 type CaptureScreenshot = (
   options?: CaptureViewportScreenshotOptions,

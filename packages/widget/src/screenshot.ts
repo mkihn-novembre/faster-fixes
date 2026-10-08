@@ -27,6 +27,21 @@ function reanchorFixedElements(cloned: Node, scrollX: number, scrollY: number) {
   }
 }
 
+function isTransparent(color: string) {
+  return color === "transparent" || color === "rgba(0, 0, 0, 0)";
+}
+
+// Only the body is cloned, so a background set on <html> (or on nothing, which
+// browsers paint white) is lost and the image comes out transparent. Fill with
+// what the Reviewer actually sees behind the page.
+function resolvePageBackground(): string {
+  for (const el of [document.body, document.documentElement]) {
+    const color = getComputedStyle(el).backgroundColor;
+    if (!isTransparent(color)) return color;
+  }
+  return "#ffffff";
+}
+
 export function captureViewportScreenshot(
   options: CaptureViewportScreenshotOptions = {},
 ): Promise<Blob | null> {
@@ -36,6 +51,7 @@ export function captureViewportScreenshot(
     width: window.innerWidth,
     height: window.innerHeight,
     scale: window.devicePixelRatio || 1,
+    backgroundColor: resolvePageBackground(),
     // restoreScrollPosition only handles scrolled children. Window scroll lives on
     // documentElement, not body, so the root clone must be shifted by hand or every
     // screenshot shows the top of the document.
